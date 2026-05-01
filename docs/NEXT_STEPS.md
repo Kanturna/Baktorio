@@ -2,7 +2,13 @@
 
 ## Aktueller Arbeitsblock
 
-Slice 1 Fundament ist angelegt. Der aktuelle Arbeitsblock ist `Body Layout Coherence + Surface Segments v1`: zusammenhaengendere Koerperplatzierung und Aussenflaechen-Topologie ohne Kampf- oder Schadenslogik.
+Slice 1 Fundament ist angelegt. Aktuell ist der Architekturvertrag fuer das Hull-and-Fluid-Koerpermodell fixiert (siehe ADR-007 bis ADR-010).
+
+Naechster Code-Slice: `Hull-and-Fluid Topology v1`: `BodyInteriorFluid`-Resource, Rename `BodySurfaceSegment` zu `BodyHullCell`, Migration der Fluid-`BodyZone`s und Render-Spike fuer `AntialiasedLine2D` und `shaderV`. Die Addon-Integration wird im Spike geprueft, nicht als Migration versprochen.
+
+## Verworfene Plaene
+
+- `Tissue Topology v1` (Hex-Lattice mit etwa 96 Tissue-Cells im Innenraum) wurde zugunsten des Hull-and-Fluid-Modells verworfen. Siehe ADR-007 (supersedes).
 
 Validierungsskript:
 

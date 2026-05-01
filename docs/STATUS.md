@@ -11,6 +11,7 @@ Bestehendes Projekt:
 - Startszene `res://scenes/body_lab.tscn`
 - Doku- und Architekturvertrag fuer Slice 1
 - minimale Datenpipeline und Renderer
+- Architekturentscheidung Hull-and-Fluid-Modell fixiert (ADR-007/008/009/010); Code-Migration steht aus.
 
 ## Slice 1
 
@@ -62,4 +63,5 @@ Body pipeline validation passed: 24 review variants, 24 unique summaries.
 
 - Seed-Reihe `1001..1024` im Godot-Editor visuell pruefen.
 - Materiallesbarkeit, SurfaceSegments und Debug Overlay manuell bewerten.
+- Code-Slice `Hull-and-Fluid Topology v1` planen und umsetzen.
 - Erst danach entscheiden, ob Antialiasing, Mutation Preview oder Kontaktlogik als naechster Slice kommt.
