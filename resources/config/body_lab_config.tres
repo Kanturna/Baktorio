@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BodyLabConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://config/body_lab_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+seed = 1001
+preview_variant_count = 24
+min_body_radius = 72.0
+max_body_radius = 132.0
+max_shell_layers = 3
+min_fluid_zones = 2
+max_fluid_zones = 5
+max_structural_zones = 4
+optional_module_threshold = 0.62
+asymmetry_strength = 0.28

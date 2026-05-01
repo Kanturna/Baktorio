@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="RenderConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://config/render_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+shell_color = Color(0.57, 0.76, 0.73, 1)
+fluid_color = Color(0.37, 0.76, 0.94, 1)
+structural_color = Color(0.94, 0.67, 0.36, 1)
+core_color = Color(0.72, 0.42, 0.92, 1)
+photosynthesis_color = Color(0.47, 0.86, 0.38, 1)
+intake_color = Color(0.94, 0.45, 0.39, 1)
+debug_color = Color(0.96, 0.96, 0.78, 1)
+shell_width = 5.0
+shell_fill_alpha = 0.14
+interior_alpha = 0.48
+wobble_strength = 3.0
+pulse_strength = 0.035
+hue_blend = 0.25
+use_blueprint_hue = true
+show_debug_overlay = false
