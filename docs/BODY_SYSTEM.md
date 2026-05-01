@@ -65,7 +65,13 @@ Enthalten:
 
 Die Segmente sind noch kein Schadenmodell. Sie sind nur die Topologie, auf der spaeter Kontakt, Absorption und lokaler Schaden aufbauen koennen.
 
+Segment-Normalen werden als geometrische Aussen-Normalen der skalierten Ellipse berechnet, nicht als einfache angulare Richtung.
+
 `BodyBlueprint.to_debug_text()` zeigt SurfaceSegment-Count und Segmente mit Modulbindung oder zusaetzlichen Zonenlinks, damit der Body Lab Inspector die Topologie pruefbar macht.
+
+## Aufbau-Reihenfolge
+
+`BlueprintBuilder` erzeugt zuerst Shell und Core, dann Fluid- und optionale Modulzonen. Structural-Zonen kommen danach, damit sie Core, Fluid und Aussenmodule als Stuetze verbinden koennen. Diese Reihenfolge ist Teil der Layout-Heuristik, nicht der Runtime-Simulation.
 
 ## Nicht in Slice 1
 

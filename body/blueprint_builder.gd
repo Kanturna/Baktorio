@@ -1,6 +1,8 @@
 class_name BlueprintBuilder
 extends RefCounted
 
+const FLUID_MIN_DISTANCE_FACTOR := 0.72
+
 
 func build(genome: Genome, config: BodyLabConfig) -> BodyBlueprint:
 	var rng := SeededRng.new(genome.seed)
@@ -31,7 +33,7 @@ func build(genome: Genome, config: BodyLabConfig) -> BodyBlueprint:
 	blueprint.module_tags = ["core", "shell", "metabolism"]
 
 	_add_shell_zone(blueprint, shell_strength)
-	var core_zone := _add_core_zone(blueprint, rng, config)
+	var core_zone := _add_core_zone(blueprint, rng)
 	var fluid_zones := _add_fluid_zones(blueprint, rng, config, fluid_ratio, complexity_gene, core_zone)
 	var module_zones := _add_optional_modules(blueprint, rng, genome, config)
 	_add_structural_zones(blueprint, rng, config, structural_ratio, complexity_gene, core_zone, fluid_zones, module_zones)
@@ -53,7 +55,7 @@ func _add_shell_zone(blueprint: BodyBlueprint, shell_strength: float) -> void:
 	blueprint.zones.append(zone)
 
 
-func _add_core_zone(blueprint: BodyBlueprint, rng: SeededRng, _config: BodyLabConfig) -> BodyZone:
+func _add_core_zone(blueprint: BodyBlueprint, rng: SeededRng) -> BodyZone:
 	var zone := BodyZone.new()
 	zone.zone_id = "core"
 	zone.kind = BodyZone.Kind.CORE
@@ -205,7 +207,7 @@ func _add_surface_segments(blueprint: BodyBlueprint, config: BodyLabConfig) -> v
 		segment.index = index
 		segment.angle_start = angle_start
 		segment.angle_end = angle_end
-		segment.normal = Vector2(cos(center_angle), sin(center_angle)).normalized()
+		segment.normal = _ellipse_normal(center_angle, blueprint.body_scale)
 		segment.center_position = _ellipse_offset(center_angle, blueprint.body_radius, blueprint.body_scale)
 		segment.linked_zone_ids = ["shell"]
 		blueprint.surface_segments.append(segment)
@@ -237,31 +239,34 @@ func _resolve_interior_position(
 ) -> Vector2:
 	var segment_count: int = max(1, fluid_zones.size() + 1)
 	var best_position: Vector2 = _ellipse_offset(angle, distance, blueprint.body_scale)
+	var best_margin: float = _interior_spacing_margin(best_position, radius, fluid_zones, core_zone, core_reserve)
 	for attempt in range(6):
 		var candidate_angle: float = angle + TAU * float(attempt) / float(segment_count + 4)
 		var candidate_distance: float = distance + float(attempt % 3) * radius * 0.28
 		var candidate: Vector2 = _ellipse_offset(candidate_angle, candidate_distance, blueprint.body_scale)
-		if _is_interior_position_clear(candidate, radius, fluid_zones, core_zone, core_reserve):
+		var candidate_margin: float = _interior_spacing_margin(candidate, radius, fluid_zones, core_zone, core_reserve)
+		if candidate_margin >= 0.0:
 			return candidate
-		best_position = candidate
+		if candidate_margin > best_margin:
+			best_margin = candidate_margin
+			best_position = candidate
 	return _shrink_position_from_core(best_position, radius, core_zone, core_reserve)
 
 
-func _is_interior_position_clear(
+func _interior_spacing_margin(
 	position: Vector2,
 	radius: float,
 	fluid_zones: Array[BodyZone],
 	core_zone: BodyZone,
 	core_reserve: float
-) -> bool:
+) -> float:
 	var core_distance := position.distance_to(core_zone.local_position)
-	if core_distance < core_reserve + radius * 0.55:
-		return false
+	var margin: float = core_distance - (core_reserve + radius * 0.55)
 	for zone in fluid_zones:
-		var min_distance := (radius + zone.radius) * 0.72
-		if position.distance_to(zone.local_position) < min_distance:
-			return false
-	return true
+		var min_distance := (radius + zone.radius) * FLUID_MIN_DISTANCE_FACTOR
+		var zone_margin: float = position.distance_to(zone.local_position) - min_distance
+		margin = min(margin, zone_margin)
+	return margin
 
 
 func _shrink_position_from_core(position: Vector2, radius: float, core_zone: BodyZone, core_reserve: float) -> Vector2:
@@ -292,6 +297,13 @@ func _nearest_surface_segment(blueprint: BodyBlueprint, position: Vector2) -> Bo
 func _surface_angle_for_position(position: Vector2, scale: Vector2) -> float:
 	var normalized := Vector2(position.x / max(0.001, scale.x), position.y / max(0.001, scale.y))
 	return wrapf(atan2(normalized.y, normalized.x), 0.0, TAU)
+
+
+func _ellipse_normal(angle: float, scale: Vector2) -> Vector2:
+	return Vector2(
+		cos(angle) / max(0.001, scale.x),
+		sin(angle) / max(0.001, scale.y)
+	).normalized()
 
 
 func _calculate_material_balance(zones: Array[BodyZone]) -> Dictionary:

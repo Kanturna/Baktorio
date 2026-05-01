@@ -1,5 +1,7 @@
 extends SceneTree
 
+const FLUID_MIN_DISTANCE_FACTOR := 0.72
+
 
 func _init() -> void:
 	call_deferred("_run")
@@ -58,6 +60,10 @@ func _run() -> void:
 			push_error("Core reserve check failed for seed %d." % variant_seed)
 			quit(1)
 			return
+		if not _has_clear_fluid_spacing(blueprint):
+			push_error("Fluid spacing check failed for seed %d." % variant_seed)
+			quit(1)
+			return
 		summaries[blueprint.to_debug_text()] = true
 
 	if summaries.size() < min(variant_count, 4):
@@ -114,6 +120,10 @@ func _has_valid_surface_segments(blueprint: BodyBlueprint, body_config: BodyLabC
 		if segment.normal.length() < 0.98 or segment.normal.length() > 1.02:
 			push_error("Surface segment %s normal is not normalized." % segment.segment_id)
 			return false
+		var expected_normal: Vector2 = _expected_surface_normal(segment, blueprint.body_scale)
+		if segment.normal.dot(expected_normal) < 0.999:
+			push_error("Surface segment %s normal does not match ellipse normal." % segment.segment_id)
+			return false
 		for zone_id in segment.linked_zone_ids:
 			if not zone_ids.has(zone_id):
 				push_error("Surface segment %s links missing zone %s." % [segment.segment_id, zone_id])
@@ -153,6 +163,7 @@ func _has_valid_module_surface_links(blueprint: BodyBlueprint) -> bool:
 
 
 func _is_base_module_tag(module_tag: String) -> bool:
+	# Base module tags are Slice-1 capabilities; optional modules must have explicit zone and surface bindings.
 	return module_tag.is_empty() or module_tag in ["core", "shell", "metabolism"]
 
 
@@ -170,6 +181,27 @@ func _has_clear_core_reserve(blueprint: BodyBlueprint, body_config: BodyLabConfi
 			push_error("Fluid zone %s is inside core reserve." % zone.zone_id)
 			return false
 	return true
+
+
+func _has_clear_fluid_spacing(blueprint: BodyBlueprint) -> bool:
+	var fluid_zones: Array[BodyZone] = blueprint.zones_by_kind(BodyZone.Kind.FLUID)
+	for left_index in range(fluid_zones.size()):
+		var left: BodyZone = fluid_zones[left_index]
+		for right_index in range(left_index + 1, fluid_zones.size()):
+			var right: BodyZone = fluid_zones[right_index]
+			var min_distance: float = (left.radius + right.radius) * FLUID_MIN_DISTANCE_FACTOR
+			if left.local_position.distance_to(right.local_position) < min_distance:
+				push_error("Fluid zones %s and %s are too close." % [left.zone_id, right.zone_id])
+				return false
+	return true
+
+
+func _expected_surface_normal(segment: BodySurfaceSegment, body_scale: Vector2) -> Vector2:
+	var center_angle: float = (segment.angle_start + segment.angle_end) * 0.5
+	return Vector2(
+		cos(center_angle) / max(0.001, body_scale.x),
+		sin(center_angle) / max(0.001, body_scale.y)
+	).normalized()
 
 
 func _zone_ids(blueprint: BodyBlueprint) -> Dictionary:

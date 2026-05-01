@@ -37,4 +37,5 @@ Nach dem ersten lauffaehigen Body Lab:
 3. Debug Overlay per Checkbox einschalten und SurfaceSegments/Normalen pruefen.
 4. Materiallesbarkeit bewerten: Shell, Fluid, Structural, Core, optionale Module.
 5. Beobachten, ob Debug-Overlay-Vertexkosten spaeter bei Populationstests relevant werden.
-6. Erst danach entscheiden, ob Antialiasing, Mutation Preview oder Kontaktlogik als naechster Slice tragfaehig ist.
+6. Vor der naechsten Layout-Heuristik entscheiden, ob `BlueprintBuilder` nach `body/placement_helpers.gd` entlastet wird.
+7. Erst danach entscheiden, ob Antialiasing, Mutation Preview oder Kontaktlogik als naechster Slice tragfaehig ist.
