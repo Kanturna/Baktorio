@@ -9,6 +9,7 @@ Der BodyBlueprint beschreibt:
 - Silhouette und Achse
 - Koerpergroesse
 - Zonen mit Materialtyp
+- segmentierte Aussenflaeche als Kontakt-Topologie
 - Pflichtmodule als Daten-Tags
 - optionale Modul-Tags
 - einfache abgeleitete Funktionswerte fuer Lesbarkeit
@@ -48,10 +49,29 @@ Diese Module sind in Slice 1 Daten-Tags im Blueprint. Sie enthalten keine Prozes
 
 Nur eines davon muss im ersten Slice plausibel erzeugbar und sichtbar sein. Beide duerfen als Tags existieren, solange keine Simulationslogik entsteht.
 
+## SurfaceSegments
+
+`BodySurfaceSegment` beschreibt einen kleinen Abschnitt der Aussenhuelle.
+
+Enthalten:
+
+- stabiler `segment_id`, z. B. `surface_00`
+- `index` als Reihenfolge um den Koerper
+- Winkelbereich in `[0, TAU)`
+- lokaler Mittelpunkt
+- normalisierte Aussen-Normale
+- optionale Modulbindung als Daten-Tag
+- `linked_zone_ids` als Soft-References auf BodyZones
+
+Die Segmente sind noch kein Schadenmodell. Sie sind nur die Topologie, auf der spaeter Kontakt, Absorption und lokaler Schaden aufbauen koennen.
+
+`BodyBlueprint.to_debug_text()` zeigt SurfaceSegment-Count und Segmente mit Modulbindung oder zusaetzlichen Zonenlinks, damit der Body Lab Inspector die Topologie pruefbar macht.
+
 ## Nicht in Slice 1
 
 - lokaler Schaden
 - Containment pro Fluidzone
 - Shell-Segmente mit Integritaet
+- SurfaceSegment-HP oder Segment-Schadenswerte
 - Modul-Lifecycle
 - Bewegung, Sensorik, Reproduktion, Fusion

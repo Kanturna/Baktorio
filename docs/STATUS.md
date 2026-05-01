@@ -35,6 +35,7 @@ Acceptance-Fragen:
 - `SeededRng` als deterministischer RNG-Wrapper
 - `GeneSchema`, `GeneConfig`, `Genome`, `GenomeFactory`
 - `BodyBlueprint`, `BodyZone`, `BlueprintBuilder`
+- `BodySurfaceSegment` als Blueprint-Topologie fuer Aussenflaechen
 - minimaler `OrganismRuntimeState`
 - `CellRenderer` mit internem Layer-Aufbau
 - `BodyLabPanel` und `BlueprintInspector`
@@ -60,5 +61,5 @@ Body pipeline validation passed: 24 review variants, 24 unique summaries.
 ## Offene Punkte
 
 - Seed-Reihe `1001..1024` im Godot-Editor visuell pruefen.
-- Materiallesbarkeit und Debug Overlay manuell bewerten.
-- Erst danach entscheiden, ob Mutation Preview als naechster Slice kommt.
+- Materiallesbarkeit, SurfaceSegments und Debug Overlay manuell bewerten.
+- Erst danach entscheiden, ob Antialiasing, Mutation Preview oder Kontaktlogik als naechster Slice kommt.

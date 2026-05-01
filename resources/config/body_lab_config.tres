@@ -6,6 +6,8 @@
 script = ExtResource("1")
 review_seed_start = 1001
 review_seed_count = 24
+surface_segment_count = 32
+core_reserve_radius_factor = 1.2
 min_body_radius = 72.0
 max_body_radius = 132.0
 max_shell_layers = 3

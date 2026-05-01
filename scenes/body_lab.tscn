@@ -1,13 +1,13 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://b2mgy6uu5058l"]
 
-[ext_resource type="Script" path="res://ui/body_lab/body_lab_panel.gd" id="1"]
-[ext_resource type="Script" path="res://rendering/cell_renderer.gd" id="2"]
-[ext_resource type="Script" path="res://ui/body_lab/blueprint_inspector.gd" id="3"]
+[ext_resource type="Script" uid="uid://cr0xe81gtk2gs" path="res://ui/body_lab/body_lab_panel.gd" id="1"]
+[ext_resource type="Script" uid="uid://jr1mevit88o7" path="res://rendering/cell_renderer.gd" id="2"]
+[ext_resource type="Script" uid="uid://rvhof76vxq6c" path="res://ui/body_lab/blueprint_inspector.gd" id="3"]
 [ext_resource type="Resource" path="res://resources/config/body_lab_config.tres" id="4"]
 [ext_resource type="Resource" path="res://resources/config/gene_config.tres" id="5"]
 [ext_resource type="Resource" path="res://resources/config/render_config.tres" id="6"]
 
-[node name="BodyLab" type="Control"]
+[node name="BodyLab" type="Control" unique_id=2124220603]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,7 +28,7 @@ random_button_path = NodePath("SidePanel/Margin/VBox/ButtonRow/RandomButton")
 variant_label_path = NodePath("SidePanel/Margin/VBox/VariantLabel")
 debug_overlay_check_path = NodePath("SidePanel/Margin/VBox/DebugOverlayCheck")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=5524597]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,99 +37,97 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.025, 0.032, 0.038, 1)
 
-[node name="PreviewRoot" type="Node2D" parent="."]
+[node name="PreviewRoot" type="Node2D" parent="." unique_id=478719365]
 position = Vector2(430, 330)
 
-[node name="CellRenderer" type="Node2D" parent="PreviewRoot"]
+[node name="CellRenderer" type="Node2D" parent="PreviewRoot" unique_id=1292566959]
 script = ExtResource("2")
 render_config = ExtResource("6")
 
-[node name="SidePanel" type="PanelContainer" parent="."]
+[node name="SidePanel" type="PanelContainer" parent="." unique_id=444080384]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 11
 anchor_left = 1.0
-anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -390.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Margin" type="MarginContainer" parent="SidePanel"]
+[node name="Margin" type="MarginContainer" parent="SidePanel" unique_id=1362396120]
 layout_mode = 2
 theme_override_constants/margin_left = 18
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 18
 theme_override_constants/margin_bottom = 18
 
-[node name="VBox" type="VBoxContainer" parent="SidePanel/Margin"]
+[node name="VBox" type="VBoxContainer" parent="SidePanel/Margin" unique_id=55928411]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Title" type="Label" parent="SidePanel/Margin/VBox"]
+[node name="Title" type="Label" parent="SidePanel/Margin/VBox" unique_id=1344802513]
 layout_mode = 2
-text = "Body Lab"
 theme_override_font_sizes/font_size = 22
+text = "Body Lab"
 
-[node name="Subtitle" type="Label" parent="SidePanel/Margin/VBox"]
+[node name="Subtitle" type="Label" parent="SidePanel/Margin/VBox" unique_id=1075620678]
 layout_mode = 2
 text = "One Organism Body Pipeline"
 
-[node name="SeedRow" type="HBoxContainer" parent="SidePanel/Margin/VBox"]
+[node name="SeedRow" type="HBoxContainer" parent="SidePanel/Margin/VBox" unique_id=2119334402]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="SeedLabel" type="Label" parent="SidePanel/Margin/VBox/SeedRow"]
+[node name="SeedLabel" type="Label" parent="SidePanel/Margin/VBox/SeedRow" unique_id=235060857]
 layout_mode = 2
 text = "Seed"
 
-[node name="SeedSpin" type="SpinBox" parent="SidePanel/Margin/VBox/SeedRow"]
+[node name="SeedSpin" type="SpinBox" parent="SidePanel/Margin/VBox/SeedRow" unique_id=1980913842]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
 max_value = 999999999.0
 value = 1001.0
 
-[node name="ButtonRow" type="HBoxContainer" parent="SidePanel/Margin/VBox"]
+[node name="ButtonRow" type="HBoxContainer" parent="SidePanel/Margin/VBox" unique_id=99269809]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="PreviousButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow"]
+[node name="PreviousButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow" unique_id=866654685]
 layout_mode = 2
 text = "Prev"
 
-[node name="GenerateButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow"]
+[node name="GenerateButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow" unique_id=621995457]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Generate"
 
-[node name="NextButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow"]
+[node name="NextButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow" unique_id=1720611637]
 layout_mode = 2
 text = "Next"
 
-[node name="RandomButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow"]
+[node name="RandomButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow" unique_id=1945770992]
 layout_mode = 2
 text = "Random"
 
-[node name="VariantLabel" type="Label" parent="SidePanel/Margin/VBox"]
+[node name="VariantLabel" type="Label" parent="SidePanel/Margin/VBox" unique_id=2093790656]
 layout_mode = 2
-autowrap_mode = 3
 text = "Seed"
+autowrap_mode = 3
 
-[node name="DebugOverlayCheck" type="CheckBox" parent="SidePanel/Margin/VBox"]
+[node name="DebugOverlayCheck" type="CheckBox" parent="SidePanel/Margin/VBox" unique_id=1188692987]
 layout_mode = 2
 text = "Debug Overlay"
 
-[node name="InspectorScroll" type="ScrollContainer" parent="SidePanel/Margin/VBox"]
+[node name="InspectorScroll" type="ScrollContainer" parent="SidePanel/Margin/VBox" unique_id=1899417131]
 custom_minimum_size = Vector2(0, 520)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BlueprintInspector" type="RichTextLabel" parent="SidePanel/Margin/VBox/InspectorScroll"]
+[node name="BlueprintInspector" type="RichTextLabel" parent="SidePanel/Margin/VBox/InspectorScroll" unique_id=1508424105]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-bbcode_enabled = false
 text = "Blueprint"
 fit_content = true
 script = ExtResource("3")

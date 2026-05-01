@@ -113,12 +113,31 @@ func _draw_debug_overlay() -> void:
 	var axis_length := blueprint.body_radius * blueprint.body_scale.x
 	draw_line(Vector2.ZERO, Vector2.RIGHT * axis_length, color, 1.0, true)
 	draw_line(Vector2.ZERO, Vector2.LEFT * axis_length * 0.35, _with_alpha(color, 0.35), 1.0, true)
+	_draw_surface_segments_debug()
 
 	for zone in blueprint.zones:
 		if zone.kind == BodyZone.Kind.SHELL:
 			continue
 		draw_circle(zone.local_position, 2.5, color)
 		draw_polyline(_closed_points(_zone_points(zone, 1.0)), _with_alpha(color, 0.42), 1.0, true)
+
+
+func _draw_surface_segments_debug() -> void:
+	if blueprint.surface_segments.is_empty():
+		return
+
+	var base_color := _with_alpha(render_config.debug_color, 0.34)
+	for segment in blueprint.surface_segments:
+		var marker_color := base_color
+		if not segment.module_tag.is_empty():
+			marker_color = _with_alpha(_module_debug_color(segment.module_tag), 0.86)
+		var outer := segment.center_position
+		var inner := outer - segment.normal * 7.0
+		var normal_end := outer + segment.normal * 11.0
+		draw_line(inner, outer, marker_color, 1.0, true)
+		if not segment.module_tag.is_empty():
+			draw_line(outer, normal_end, marker_color, 1.8, true)
+			draw_circle(outer, 3.0, marker_color)
 
 
 func _silhouette_points(radius_offset: float, pulse: float) -> PackedVector2Array:
@@ -205,6 +224,16 @@ func _material_color(material_id: String) -> Color:
 		var hue_color := Color.from_hsv(wrapf(blueprint.pigment_hue, 0.0, 1.0), 0.58, 0.92, color.a)
 		color = color.lerp(hue_color, render_config.hue_blend)
 	return color
+
+
+func _module_debug_color(module_tag: String) -> Color:
+	match module_tag:
+		"photosynthesis":
+			return render_config.photosynthesis_color
+		"intake":
+			return render_config.intake_color
+		_:
+			return render_config.debug_color
 
 
 func _with_alpha(color: Color, alpha: float) -> Color:
