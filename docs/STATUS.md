@@ -36,7 +36,7 @@ Acceptance-Fragen:
 - `SeededRng` als deterministischer RNG-Wrapper
 - `GeneSchema`, `GeneConfig`, `Genome`, `GenomeFactory`
 - `BodyBlueprint`, `BodyZone`, `BlueprintBuilder`
-- `BodySurfaceSegment` als Blueprint-Topologie fuer Aussenflaechen
+- `BodyHullCell` als Blueprint-Topologie fuer Aussenflaechen (vorher `BodySurfaceSegment`, umbenannt nach ADR-009)
 - minimaler `OrganismRuntimeState`
 - `CellRenderer` mit internem Layer-Aufbau
 - `BodyLabPanel` und `BlueprintInspector`
@@ -62,6 +62,6 @@ Body pipeline validation passed: 24 review variants, 24 unique summaries.
 ## Offene Punkte
 
 - Seed-Reihe `1001..1024` im Godot-Editor visuell pruefen.
-- Materiallesbarkeit, SurfaceSegments und Debug Overlay manuell bewerten.
+- Materiallesbarkeit, Huellzellen und Debug Overlay manuell bewerten.
 - Code-Slice `Hull-and-Fluid Topology v1` planen und umsetzen.
 - Erst danach entscheiden, ob Antialiasing, Mutation Preview oder Kontaktlogik als naechster Slice kommt.

@@ -3,7 +3,7 @@ extends Resource
 
 @export var review_seed_start: int = 1001
 @export_range(1, 64, 1) var review_seed_count: int = 24
-@export_range(8, 96, 1) var surface_segment_count: int = 32
+@export_range(8, 96, 1) var hull_cell_count: int = 32
 @export_range(1.0, 3.0, 0.05) var core_reserve_radius_factor: float = 1.2
 @export_range(32.0, 220.0, 1.0) var min_body_radius: float = 72.0
 @export_range(32.0, 260.0, 1.0) var max_body_radius: float = 132.0

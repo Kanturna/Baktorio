@@ -37,7 +37,7 @@ func build(genome: Genome, config: BodyLabConfig) -> BodyBlueprint:
 	var fluid_zones := _add_fluid_zones(blueprint, rng, config, fluid_ratio, complexity_gene, core_zone)
 	var module_zones := _add_optional_modules(blueprint, rng, genome, config)
 	_add_structural_zones(blueprint, rng, config, structural_ratio, complexity_gene, core_zone, fluid_zones, module_zones)
-	_add_surface_segments(blueprint, config)
+	_add_hull_cells(blueprint, config)
 
 	blueprint.material_balance = _calculate_material_balance(blueprint.zones)
 	return blueprint
@@ -195,33 +195,33 @@ func _add_optional_modules(blueprint: BodyBlueprint, rng: SeededRng, genome: Gen
 	return module_zones
 
 
-func _add_surface_segments(blueprint: BodyBlueprint, config: BodyLabConfig) -> void:
-	var segment_count: int = max(8, config.surface_segment_count)
-	var angle_step: float = TAU / float(segment_count)
-	for index in range(segment_count):
+func _add_hull_cells(blueprint: BodyBlueprint, config: BodyLabConfig) -> void:
+	var cell_count: int = max(8, config.hull_cell_count)
+	var angle_step: float = TAU / float(cell_count)
+	for index in range(cell_count):
 		var angle_start: float = angle_step * float(index)
 		var angle_end: float = angle_step * float(index + 1)
 		var center_angle: float = (angle_start + angle_end) * 0.5
-		var segment := BodySurfaceSegment.new()
-		segment.segment_id = "surface_%02d" % index
-		segment.index = index
-		segment.angle_start = angle_start
-		segment.angle_end = angle_end
-		segment.normal = _ellipse_normal(center_angle, blueprint.body_scale)
-		segment.center_position = _ellipse_offset(center_angle, blueprint.body_radius, blueprint.body_scale)
-		segment.linked_zone_ids = ["shell"]
-		blueprint.surface_segments.append(segment)
+		var cell := BodyHullCell.new()
+		cell.cell_id = "hull_%02d" % index
+		cell.index = index
+		cell.angle_start = angle_start
+		cell.angle_end = angle_end
+		cell.normal = _ellipse_normal(center_angle, blueprint.body_scale)
+		cell.center_position = _ellipse_offset(center_angle, blueprint.body_radius, blueprint.body_scale)
+		cell.linked_zone_ids = ["shell"]
+		blueprint.hull_cells.append(cell)
 
 	for zone in blueprint.zones:
 		if zone.kind == BodyZone.Kind.SHELL:
 			continue
-		var segment: BodySurfaceSegment = _nearest_surface_segment(blueprint, zone.local_position)
-		if segment == null:
+		var cell: BodyHullCell = _nearest_hull_cell(blueprint, zone.local_position)
+		if cell == null:
 			continue
-		if not segment.linked_zone_ids.has(zone.zone_id):
-			segment.linked_zone_ids.append(zone.zone_id)
+		if not cell.linked_zone_ids.has(zone.zone_id):
+			cell.linked_zone_ids.append(zone.zone_id)
 		if not zone.module_tag.is_empty() and zone.module_tag != "core":
-			segment.module_tag = zone.module_tag
+			cell.module_tag = zone.module_tag
 
 
 func _ellipse_offset(angle: float, distance: float, scale: Vector2) -> Vector2:
@@ -279,22 +279,22 @@ func _shrink_position_from_core(position: Vector2, radius: float, core_zone: Bod
 	return position
 
 
-func _nearest_surface_segment(blueprint: BodyBlueprint, position: Vector2) -> BodySurfaceSegment:
-	if blueprint.surface_segments.is_empty():
+func _nearest_hull_cell(blueprint: BodyBlueprint, position: Vector2) -> BodyHullCell:
+	if blueprint.hull_cells.is_empty():
 		return null
-	var angle: float = _surface_angle_for_position(position, blueprint.body_scale)
-	var best_segment: BodySurfaceSegment = blueprint.surface_segments[0]
+	var angle: float = _hull_angle_for_position(position, blueprint.body_scale)
+	var best_cell: BodyHullCell = blueprint.hull_cells[0]
 	var best_distance: float = TAU
-	for segment in blueprint.surface_segments:
-		var center_angle: float = (segment.angle_start + segment.angle_end) * 0.5
+	for cell in blueprint.hull_cells:
+		var center_angle: float = (cell.angle_start + cell.angle_end) * 0.5
 		var distance: float = abs(angle_difference(angle, center_angle))
 		if distance < best_distance:
 			best_distance = distance
-			best_segment = segment
-	return best_segment
+			best_cell = cell
+	return best_cell
 
 
-func _surface_angle_for_position(position: Vector2, scale: Vector2) -> float:
+func _hull_angle_for_position(position: Vector2, scale: Vector2) -> float:
 	var normalized := Vector2(position.x / max(0.001, scale.x), position.y / max(0.001, scale.y))
 	return wrapf(atan2(normalized.y, normalized.x), 0.0, TAU)
 

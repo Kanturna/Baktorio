@@ -12,7 +12,7 @@ extends Resource
 @export var pigment_hue: float = 0.5
 @export var module_tags: Array[String] = []
 @export var zones: Array[BodyZone] = []
-@export var surface_segments: Array[BodySurfaceSegment] = []
+@export var hull_cells: Array[BodyHullCell] = []
 @export var material_balance: Dictionary = {}
 @export var gene_snapshot: Dictionary = {}
 
@@ -47,8 +47,8 @@ func to_debug_text() -> String:
 	for zone in zones:
 		lines.append("  %s" % zone.summary())
 	lines.append("")
-	lines.append("Surface segments: %d" % surface_segments.size())
-	for segment in surface_segments:
-		if not segment.module_tag.is_empty() or segment.linked_zone_ids.size() > 1:
-			lines.append("  %s" % segment.summary())
+	lines.append("Hull cells: %d" % hull_cells.size())
+	for cell in hull_cells:
+		if not cell.module_tag.is_empty() or cell.linked_zone_ids.size() > 1:
+			lines.append("  %s" % cell.summary())
 	return "\n".join(lines)

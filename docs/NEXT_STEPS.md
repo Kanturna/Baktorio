@@ -4,7 +4,7 @@
 
 Slice 1 Fundament ist angelegt. Aktuell ist der Architekturvertrag fuer das Hull-and-Fluid-Koerpermodell fixiert (siehe ADR-007 bis ADR-010).
 
-Naechster Code-Slice: `Hull-and-Fluid Topology v1`: `BodyInteriorFluid`-Resource, Rename `BodySurfaceSegment` zu `BodyHullCell`, Migration der Fluid-`BodyZone`s und Render-Spike fuer `AntialiasedLine2D` und `shaderV`. Die Addon-Integration wird im Spike geprueft, nicht als Migration versprochen.
+Aktueller Code-Slice (in Arbeit): `Hull-and-Fluid Topology v1`. Erster Schritt erledigt: Rename `BodySurfaceSegment` zu `BodyHullCell` (siehe ADR-009). Naechste Schritte: `BodyInteriorFluid`-Resource und Migration der Fluid-`BodyZone`s, dann Render-Spike fuer `AntialiasedLine2D` und `shaderV`. Die Addon-Integration wird im Spike geprueft, nicht als Migration versprochen.
 
 ## Verworfene Plaene
 
@@ -40,7 +40,7 @@ Nach dem ersten lauffaehigen Body Lab:
 
 1. Body Lab im Godot-Editor oeffnen.
 2. Seed-Reihe 1001 bis 1024 per Prev/Next visuell pruefen.
-3. Debug Overlay per Checkbox einschalten und SurfaceSegments/Normalen pruefen.
+3. Debug Overlay per Checkbox einschalten und Huellzellen/Normalen pruefen.
 4. Materiallesbarkeit bewerten: Shell, Fluid, Structural, Core, optionale Module.
 5. Beobachten, ob Debug-Overlay-Vertexkosten spaeter bei Populationstests relevant werden.
 6. Vor der naechsten Layout-Heuristik entscheiden, ob `BlueprintBuilder` nach `body/placement_helpers.gd` entlastet wird.

@@ -68,13 +68,11 @@ Nur eines davon muss im ersten Slice plausibel erzeugbar und sichtbar sein. Beid
 
 ## Huellzellen (HullCells)
 
-Im aktuellen Code heisst diese Entitaet noch `BodySurfaceSegment`. Der Rename auf `BodyHullCell` ist mit ADR-009 beschlossen und wird im Folge-Slice umgesetzt. Bis dahin sind in dieser Doku "Huellzelle" und der Code-Name `BodySurfaceSegment` gleichbedeutend.
-
-`BodySurfaceSegment` beschreibt einen kleinen Abschnitt der Aussenhuelle, also eine einzelne Huellzelle.
+`BodyHullCell` beschreibt einen kleinen Abschnitt der Aussenhuelle, also eine einzelne Huellzelle.
 
 Enthalten:
 
-- stabiler `segment_id`, z. B. `surface_00`
+- stabiler `cell_id`, z. B. `hull_00`
 - `index` als Reihenfolge um den Koerper
 - Winkelbereich in `[0, TAU)`
 - lokaler Mittelpunkt
@@ -86,7 +84,7 @@ Die Huellzellen sind noch kein Schadenmodell. Sie sind nur die Topologie, auf de
 
 Huellzellen-Normalen werden als geometrische Aussen-Normalen der skalierten Ellipse berechnet, nicht als einfache angulare Richtung.
 
-Nachbarschaft links/rechts entlang des Rings ist trivial aus `index` ableitbar; explizite `neighbor_cell_ids` werden im Folge-Slice ergaenzt (fuer den spaeteren Bruchbereich-Algorithmus).
+Nachbarschaft links/rechts entlang des Rings ist trivial aus `index` ableitbar; explizite `neighbor_cell_ids` werden in einem spaeteren Slice ergaenzt (fuer den spaeteren Bruchbereich-Algorithmus).
 
 `BodyBlueprint.to_debug_text()` zeigt Huellzellen-Count und Huellzellen mit Modulbindung oder zusaetzlichen Zonenlinks, damit der Body Lab Inspector die Topologie pruefbar macht.
 
@@ -141,7 +139,7 @@ Eine ausfuehrliche Effekt-Auswahl gehoert in den spaeteren Render-Plan, nicht in
 - lokaler Schaden
 - Containment pro Fluidzone
 - Shell-Segmente mit Integritaet
-- SurfaceSegment- bzw. Huellzellen-HP oder Segment-Schadenswerte
+- Huellzellen-HP oder Segment-Schadenswerte
 - Modul-Lifecycle
 - Bewegung, Sensorik, Reproduktion, Fusion
 

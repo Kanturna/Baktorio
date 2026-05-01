@@ -48,12 +48,12 @@ func _run() -> void:
 			push_error("Required material check failed for seed %d." % variant_seed)
 			quit(1)
 			return
-		if not _has_valid_surface_segments(blueprint, body_config):
-			push_error("Surface segment check failed for seed %d." % variant_seed)
+		if not _has_valid_hull_cells(blueprint, body_config):
+			push_error("Hull cell check failed for seed %d." % variant_seed)
 			quit(1)
 			return
-		if not _has_valid_module_surface_links(blueprint):
-			push_error("Module surface link check failed for seed %d." % variant_seed)
+		if not _has_valid_module_hull_links(blueprint):
+			push_error("Module hull link check failed for seed %d." % variant_seed)
 			quit(1)
 			return
 		if not _has_clear_core_reserve(blueprint, body_config):
@@ -89,75 +89,75 @@ func _has_required_materials(blueprint: BodyBlueprint) -> bool:
 	return materials.has("shell") and materials.has("fluid") and materials.has("core")
 
 
-func _has_valid_surface_segments(blueprint: BodyBlueprint, body_config: BodyLabConfig) -> bool:
-	var expected_count: int = max(8, body_config.surface_segment_count)
-	if blueprint.surface_segments.size() != expected_count:
-		push_error("Expected %d surface segments, got %d." % [expected_count, blueprint.surface_segments.size()])
+func _has_valid_hull_cells(blueprint: BodyBlueprint, body_config: BodyLabConfig) -> bool:
+	var expected_count: int = max(8, body_config.hull_cell_count)
+	if blueprint.hull_cells.size() != expected_count:
+		push_error("Expected %d hull cells, got %d." % [expected_count, blueprint.hull_cells.size()])
 		return false
 
 	var zone_ids: Dictionary = _zone_ids(blueprint)
 	var seen_ids: Dictionary = {}
 	var angle_step: float = TAU / float(expected_count)
 	for index in range(expected_count):
-		var segment: BodySurfaceSegment = blueprint.surface_segments[index]
-		var expected_id: String = "surface_%02d" % index
-		if segment.index != index:
-			push_error("Surface segment index mismatch at %d." % index)
+		var cell: BodyHullCell = blueprint.hull_cells[index]
+		var expected_id: String = "hull_%02d" % index
+		if cell.index != index:
+			push_error("Hull cell index mismatch at %d." % index)
 			return false
-		if segment.segment_id != expected_id:
-			push_error("Surface segment id mismatch: %s != %s." % [segment.segment_id, expected_id])
+		if cell.cell_id != expected_id:
+			push_error("Hull cell id mismatch: %s != %s." % [cell.cell_id, expected_id])
 			return false
-		if seen_ids.has(segment.segment_id):
-			push_error("Duplicate surface segment id: %s." % segment.segment_id)
+		if seen_ids.has(cell.cell_id):
+			push_error("Duplicate hull cell id: %s." % cell.cell_id)
 			return false
-		seen_ids[segment.segment_id] = true
+		seen_ids[cell.cell_id] = true
 
 		var expected_start: float = angle_step * float(index)
 		var expected_end: float = angle_step * float(index + 1)
-		if abs(segment.angle_start - expected_start) > 0.0001 or abs(segment.angle_end - expected_end) > 0.0001:
-			push_error("Surface segment %s does not tile expected angle range." % segment.segment_id)
+		if abs(cell.angle_start - expected_start) > 0.0001 or abs(cell.angle_end - expected_end) > 0.0001:
+			push_error("Hull cell %s does not tile expected angle range." % cell.cell_id)
 			return false
-		if segment.normal.length() < 0.98 or segment.normal.length() > 1.02:
-			push_error("Surface segment %s normal is not normalized." % segment.segment_id)
+		if cell.normal.length() < 0.98 or cell.normal.length() > 1.02:
+			push_error("Hull cell %s normal is not normalized." % cell.cell_id)
 			return false
-		var expected_normal: Vector2 = _expected_surface_normal(segment, blueprint.body_scale)
-		if segment.normal.dot(expected_normal) < 0.999:
-			push_error("Surface segment %s normal does not match ellipse normal." % segment.segment_id)
+		var expected_normal: Vector2 = _expected_hull_normal(cell, blueprint.body_scale)
+		if cell.normal.dot(expected_normal) < 0.999:
+			push_error("Hull cell %s normal does not match ellipse normal." % cell.cell_id)
 			return false
-		for zone_id in segment.linked_zone_ids:
+		for zone_id in cell.linked_zone_ids:
 			if not zone_ids.has(zone_id):
-				push_error("Surface segment %s links missing zone %s." % [segment.segment_id, zone_id])
+				push_error("Hull cell %s links missing zone %s." % [cell.cell_id, zone_id])
 				return false
 	return true
 
 
-func _has_valid_module_surface_links(blueprint: BodyBlueprint) -> bool:
+func _has_valid_module_hull_links(blueprint: BodyBlueprint) -> bool:
 	for zone in blueprint.zones:
 		if not _is_base_module_tag(zone.module_tag) and not blueprint.module_tags.has(zone.module_tag):
 			push_error("Zone %s has unknown module tag %s." % [zone.zone_id, zone.module_tag])
 			return false
 
-	for segment in blueprint.surface_segments:
-		if not segment.module_tag.is_empty() and not blueprint.module_tags.has(segment.module_tag):
-			push_error("Surface segment %s has unknown module tag %s." % [segment.segment_id, segment.module_tag])
+	for cell in blueprint.hull_cells:
+		if not cell.module_tag.is_empty() and not blueprint.module_tags.has(cell.module_tag):
+			push_error("Hull cell %s has unknown module tag %s." % [cell.cell_id, cell.module_tag])
 			return false
 
 	for module_tag in blueprint.module_tags:
 		if _is_base_module_tag(module_tag):
 			continue
 		var zone_count: int = 0
-		var segment_count: int = 0
+		var hull_cell_count: int = 0
 		for zone in blueprint.zones:
 			if zone.module_tag == module_tag:
 				zone_count += 1
-		for segment in blueprint.surface_segments:
-			if segment.module_tag == module_tag:
-				segment_count += 1
+		for cell in blueprint.hull_cells:
+			if cell.module_tag == module_tag:
+				hull_cell_count += 1
 		if zone_count > 1:
 			push_error("Module tag %s is assigned to too many zones." % module_tag)
 			return false
-		if segment_count < 1:
-			push_error("Module tag %s has no surface segment." % module_tag)
+		if hull_cell_count < 1:
+			push_error("Module tag %s has no hull cell." % module_tag)
 			return false
 	return true
 
@@ -196,8 +196,8 @@ func _has_clear_fluid_spacing(blueprint: BodyBlueprint) -> bool:
 	return true
 
 
-func _expected_surface_normal(segment: BodySurfaceSegment, body_scale: Vector2) -> Vector2:
-	var center_angle: float = (segment.angle_start + segment.angle_end) * 0.5
+func _expected_hull_normal(cell: BodyHullCell, body_scale: Vector2) -> Vector2:
+	var center_angle: float = (cell.angle_start + cell.angle_end) * 0.5
 	return Vector2(
 		cos(center_angle) / max(0.001, body_scale.x),
 		sin(center_angle) / max(0.001, body_scale.y)
@@ -269,7 +269,7 @@ func _body_config_snapshot(config: BodyLabConfig) -> String:
 	return JSON.stringify({
 		"review_seed_start": config.review_seed_start,
 		"review_seed_count": config.review_seed_count,
-		"surface_segment_count": config.surface_segment_count,
+		"hull_cell_count": config.hull_cell_count,
 		"core_reserve_radius_factor": config.core_reserve_radius_factor,
 		"min_body_radius": config.min_body_radius,
 		"max_body_radius": config.max_body_radius,

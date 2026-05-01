@@ -113,7 +113,7 @@ func _draw_debug_overlay() -> void:
 	var axis_length := blueprint.body_radius * blueprint.body_scale.x
 	draw_line(Vector2.ZERO, Vector2.RIGHT * axis_length, color, 1.0, true)
 	draw_line(Vector2.ZERO, Vector2.LEFT * axis_length * 0.35, _with_alpha(color, 0.35), 1.0, true)
-	_draw_surface_segments_debug()
+	_draw_hull_cells_debug()
 
 	for zone in blueprint.zones:
 		if zone.kind == BodyZone.Kind.SHELL:
@@ -122,20 +122,20 @@ func _draw_debug_overlay() -> void:
 		draw_polyline(_closed_points(_zone_points(zone, 1.0)), _with_alpha(color, 0.42), 1.0, true)
 
 
-func _draw_surface_segments_debug() -> void:
-	if blueprint.surface_segments.is_empty():
+func _draw_hull_cells_debug() -> void:
+	if blueprint.hull_cells.is_empty():
 		return
 
 	var base_color := _with_alpha(render_config.debug_color, 0.34)
-	for segment in blueprint.surface_segments:
+	for cell in blueprint.hull_cells:
 		var marker_color := base_color
-		if not segment.module_tag.is_empty():
-			marker_color = _with_alpha(_module_debug_color(segment.module_tag), 0.86)
-		var outer := segment.center_position
-		var inner := outer - segment.normal * 7.0
-		var normal_end := outer + segment.normal * 11.0
+		if not cell.module_tag.is_empty():
+			marker_color = _with_alpha(_module_debug_color(cell.module_tag), 0.86)
+		var outer := cell.center_position
+		var inner := outer - cell.normal * 7.0
+		var normal_end := outer + cell.normal * 11.0
 		draw_line(inner, outer, marker_color, 1.0, true)
-		if not segment.module_tag.is_empty():
+		if not cell.module_tag.is_empty():
 			draw_line(outer, normal_end, marker_color, 1.8, true)
 			draw_circle(outer, 3.0, marker_color)
 
