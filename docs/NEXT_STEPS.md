@@ -2,7 +2,7 @@
 
 ## Aktueller Arbeitsblock
 
-Slice 1 Fundament ist angelegt. Der naechste Arbeitsblock ist visuelle Review und Tuning des Body Labs.
+Slice 1 Fundament ist angelegt. Der aktuelle Arbeitsblock ist `Visual Body Lab v1`: Review-Navigation, Debug-Overlay-Steuerung und Config-Mutation-Schutz fuer die Seed-Reihe `1001..1024`.
 
 Validierungsskript:
 
@@ -32,7 +32,8 @@ Nach dem ersten lauffaehigen Body Lab:
 ## Konkrete naechste Schritte
 
 1. Body Lab im Godot-Editor oeffnen.
-2. Seed-Reihe 1001 bis 1024 visuell pruefen.
-3. Materiallesbarkeit bewerten: Shell, Fluid, Structural, Core, optionale Module.
-4. Renderer-Tuning nur ueber `RenderConfig` vornehmen, solange keine neue Darstellungslogik noetig ist.
-5. Danach ADR fuer den naechsten Slice schreiben.
+2. Seed-Reihe 1001 bis 1024 per Prev/Next visuell pruefen.
+3. Debug Overlay per Checkbox ein- und ausschalten.
+4. Random und manuelle Seed-Eingabe pruefen; ausserhalb der Review-Range muss `off-review` angezeigt werden.
+5. Materiallesbarkeit bewerten: Shell, Fluid, Structural, Core, optionale Module.
+6. Erst danach entscheiden, ob Mutation Preview als naechster Slice tragfaehig ist.

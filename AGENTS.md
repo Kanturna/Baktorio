@@ -68,7 +68,7 @@ Jeder Slice braucht einen konkreten Validierungspfad. Fuer Slice 1:
 
 Nach jeder abgeschlossenen Aenderung muss die abschliessende Antwort einen Commit-Vorschlag enthalten:
 
-- Commit-Name: kurzer imperativer Titel, passend fuer eine Git-Commit-Message.
+- Commit-Name: kurzer imperativer Titel mit Conventional-Commit-Kategorie vorne, z. B. `feat:`, `fix:`, `docs:`, `test:`, `refactor:` oder `chore:`.
 - Commit-Beschreibung: konkret genug, um den Change spaeter ohne Diff grob einordnen zu koennen.
 - Bei kleinen Aenderungen reichen 2 bis 5 Saetze oder Bulletpoints.
 - Bei groesseren Slices darf die Beschreibung detaillierter sein und Scope, Architekturentscheidungen, wichtigste Dateien, Validierung und bewusst ausgelassene Themen nennen.

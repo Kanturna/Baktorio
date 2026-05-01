@@ -31,3 +31,11 @@ Status: akzeptiert
 Der visuelle Layer-Aufbau wird in `CellRenderer` durch private Draw-Methoden strukturiert. Separate Renderer-Dateien entstehen erst, wenn ein Layer eigene Daten, Performance-Pfade oder Lebenszyklen braucht.
 
 Konsequenz: Slice 1 bleibt klein und schichtsauber, ohne eine Renderer-Klassenfamilie vorwegzunehmen.
+
+## ADR-005: Visual Body Lab v1 before mutation
+
+Status: akzeptiert
+
+Vor Mutation Preview, Simulation oder Evolution wird das Body Lab als visuelles Review-Werkzeug stabilisiert. Die Seed-Reihe `1001..1024` soll schnell pruefbar sein, ohne geteilte `.tres`-Resources zur Laufzeit zu mutieren.
+
+Konsequenz: Der naechste Slice bleibt im bestehenden Body-Lab- und Renderer-Rahmen. Er ergaenzt Review-Navigation, Debug-Overlay-Steuerung und Headless-Assertions gegen Config-Mutation, aber keine Mutation, Population, Schadenslogik oder neuen Renderer-Klassen.

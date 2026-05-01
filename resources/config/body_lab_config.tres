@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-seed = 1001
-preview_variant_count = 24
+review_seed_start = 1001
+review_seed_count = 24
 min_body_radius = 72.0
 max_body_radius = 132.0
 max_shell_layers = 3

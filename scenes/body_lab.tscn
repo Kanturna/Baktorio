@@ -26,6 +26,7 @@ previous_button_path = NodePath("SidePanel/Margin/VBox/ButtonRow/PreviousButton"
 next_button_path = NodePath("SidePanel/Margin/VBox/ButtonRow/NextButton")
 random_button_path = NodePath("SidePanel/Margin/VBox/ButtonRow/RandomButton")
 variant_label_path = NodePath("SidePanel/Margin/VBox/VariantLabel")
+debug_overlay_check_path = NodePath("SidePanel/Margin/VBox/DebugOverlayCheck")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -95,7 +96,7 @@ theme_override_constants/separation = 6
 
 [node name="PreviousButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow"]
 layout_mode = 2
-text = "<"
+text = "Prev"
 
 [node name="GenerateButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow"]
 layout_mode = 2
@@ -104,7 +105,7 @@ text = "Generate"
 
 [node name="NextButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow"]
 layout_mode = 2
-text = ">"
+text = "Next"
 
 [node name="RandomButton" type="Button" parent="SidePanel/Margin/VBox/ButtonRow"]
 layout_mode = 2
@@ -114,6 +115,10 @@ text = "Random"
 layout_mode = 2
 autowrap_mode = 3
 text = "Seed"
+
+[node name="DebugOverlayCheck" type="CheckBox" parent="SidePanel/Margin/VBox"]
+layout_mode = 2
+text = "Debug Overlay"
 
 [node name="InspectorScroll" type="ScrollContainer" parent="SidePanel/Margin/VBox"]
 custom_minimum_size = Vector2(0, 520)

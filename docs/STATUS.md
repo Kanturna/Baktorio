@@ -38,6 +38,8 @@ Acceptance-Fragen:
 - minimaler `OrganismRuntimeState`
 - `CellRenderer` mit internem Layer-Aufbau
 - `BodyLabPanel` und `BlueprintInspector`
+- Review-Navigation fuer Seed-Reihe `1001..1024`
+- Debug-Overlay-Toggle ueber Runtime-RenderConfig-Kopie
 - Config-Resources unter `resources/config/`
 - Headless-Validierung unter `tools/validate_body_pipeline.gd`
 
@@ -52,11 +54,11 @@ godot_console.exe --headless --path . --quit-after 1
 Ergebnis:
 
 ```text
-Body pipeline validation passed: 24 variants, 24 unique summaries.
+Body pipeline validation passed: 24 review variants, 24 unique summaries.
 ```
 
 ## Offene Punkte
 
-- Visuelle Feinabstimmung im Godot-Editor pruefen.
-- 20 bis 30 Seeds als Screenshot-Set bewerten.
-- Erst danach entscheiden, ob der naechste Slice Mutation Preview, Material-Tuning oder minimale Zellfunktion wird.
+- Seed-Reihe `1001..1024` im Godot-Editor visuell pruefen.
+- Materiallesbarkeit und Debug Overlay manuell bewerten.
+- Erst danach entscheiden, ob Mutation Preview als naechster Slice kommt.
